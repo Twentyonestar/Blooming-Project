@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
+import "./App.css";
 
 const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -219,37 +219,37 @@ if (Math.abs(targetProgressRef.current - nextTarget) > 0.05) {
   };
 
   return (
-    <div style={styles.app} onMouseMove={handleMouseMove}>
+    <div className="app-container" onMouseMove={handleMouseMove}>
       <video
         ref={flowerVideoRef}
         src="/flower_bloom.mp4"
         muted
         playsInline
         preload="auto"
-        style={styles.flower}
+        className="flower-video"
       />
 
-      <div style={styles.debugPanel}>
-        <div style={styles.debugTitle}>Bloom Debug</div>
+      <div className="debug-panel">
+        <div className="debug-title">Bloom Debug</div>
         <div>mode: {mode}</div>
         <div>hand detected: {handDetected ? "yes" : "no"}</div>
         <div>open fingers: {openFingerCount}</div>
         <div>progress: {smoothProgressRef.current.toFixed(2)}</div>
-        <div style={styles.debugNote}>{statusText}</div>
+        <div className="debug-note">{statusText}</div>
       </div>
 
-      <div style={styles.webcamPanel}>
+      <div className="webcam-panel">
         <video
           ref={webcamRef}
           autoPlay
           muted
           playsInline
-          style={styles.webcamVideo}
+          className="webcam-video"
         />
-        <canvas ref={canvasRef} width={320} height={240} style={styles.canvas} />
+        <canvas ref={canvasRef} width={320} height={240} className="canvas-overlay" />
       </div>
 
-      <div style={styles.instruction}>
+      <div className="instruction-text">
         {mode === "fallback"
           ? "Move the mouse upward to bloom the flower."
           : "Open your hand to bloom the flower. Close your hand to let it fall back."}
@@ -257,89 +257,3 @@ if (Math.abs(targetProgressRef.current - nextTarget) > 0.05) {
     </div>
   );
 }
-
-const styles = {
-  app: {
-    position: "relative",
-    width: "100vw",
-    height: "100vh",
-    background: "#000",
-    overflow: "hidden",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    color: "#fff",
-  },
-  flower: {
-    width: "min(78vw, 1200px)",
-    maxHeight: "82vh",
-    objectFit: "contain",
-    pointerEvents: "none",
-    filter: "drop-shadow(0 0 24px rgba(255,255,255,0.08))",
-  },
-  debugPanel: {
-    position: "absolute",
-    top: 24,
-    left: 24,
-    width: 240,
-    padding: "14px 16px",
-    borderRadius: 16,
-    background: "rgba(15,15,15,0.72)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    fontSize: 14,
-    lineHeight: 1.6,
-    zIndex: 2,
-  },
-  debugTitle: {
-    fontWeight: 700,
-    marginBottom: 8,
-  },
-  debugNote: {
-    marginTop: 8,
-    fontSize: 12,
-    color: "rgba(255,255,255,0.75)",
-  },
-  webcamPanel: {
-    position: "absolute",
-    right: 24,
-    top: 24,
-    width: 320,
-    height: 240,
-    overflow: "hidden",
-    borderRadius: 16,
-    background: "rgba(15,15,15,0.72)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    zIndex: 2,
-  },
-  webcamVideo: {
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    transform: "scaleX(-1)",
-    opacity: 0.35,
-  },
-  canvas: {
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    transform: "scaleX(-1)",
-  },
-  instruction: {
-    position: "absolute",
-    bottom: 28,
-    left: "50%",
-    transform: "translateX(-50%)",
-    padding: "12px 18px",
-    borderRadius: 999,
-    background: "rgba(15,15,15,0.72)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    fontSize: 14,
-    zIndex: 2,
-    whiteSpace: "nowrap",
-  },
-};
