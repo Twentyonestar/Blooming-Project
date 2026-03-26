@@ -56,6 +56,7 @@ export default function App() {
     if (!video) return;
 
     const handleLoaded = () => {
+      video.pause();
       setVideoReady(true);
       if (video.duration && Number.isFinite(video.duration)) {
         video.currentTime = video.duration * 0.05;
@@ -211,20 +212,38 @@ if (Math.abs(targetProgressRef.current - nextTarget) > 0.05) {
     };
   }, [videoReady]);
 
-  const handleMouseMove = (e) => {
+  const handleMove = (clientY) => {
     if (mode !== "fallback") return;
 
-    const ratio = clamp(e.clientY / window.innerHeight, 0, 1);
+    const ratio = clamp(clientY / window.innerHeight, 0, 1);
     targetProgressRef.current = 0.9 - ratio * 0.8;
   };
 
+  const handleMouseMove = (e) => handleMove(e.clientY);
+
+  const handleTouch = (e) => {
+    const video = flowerVideoRef.current;
+    if (video && video.paused && !videoReady) {
+      video.play().catch(() => {});
+    }
+    if (e.touches && e.touches.length > 0) {
+      handleMove(e.touches[0].clientY);
+    }
+  };
+
   return (
-    <div className="app-container" onMouseMove={handleMouseMove}>
+    <div 
+      className="app-container" 
+      onMouseMove={handleMouseMove}
+      onTouchMove={handleTouch}
+      onTouchStart={handleTouch}
+    >
       <video
         ref={flowerVideoRef}
         src="/flower_bloom.mp4"
         muted
         playsInline
+        autoPlay
         preload="auto"
         className="flower-video"
       />
